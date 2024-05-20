@@ -1,12 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="script.js"></script>
+    <title>FaQ Tienda Online</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <header>
+        <h1 class="titulo-tienda">Bienvenido a FaQ Tienda Online</h1>
+    </header>
+    <main>
+        <section id="productos">
+            <h2>Productos Disponibles</h2>
+            <div class="producto">
+                <span>1- Gaseosa $2500</span>
+                <button onclick="mostrarFormulario(1)">Agregar al carrito</button>
+            </div>
+            <div class="producto">
+                <span>2- Cerveza $3200</span>
+                <button onclick="mostrarFormulario(2)">Agregar al carrito</button>
+            </div>
+            <div class="producto">
+                <span>3- Galletitas $1200</span>
+                <button onclick="mostrarFormulario(3)">Agregar al carrito</button>
+            </div>
+            <div class="producto">
+                <span>4- Hamburguesa $4500</span>
+                <button onclick="mostrarFormulario(4)">Agregar al carrito</button>
+            </div>
+        </section>
+
+        <section id="formulario-compra" style="display:none;">
+            <h3>Formulario de Compra</h3>
+            <label for="nombre-usuario">Nombre:</label>
+            <input type="text" id="nombre-usuario"><br><br>
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad"><br><br>
+            <label for="dinero">Dinero:</label>
+            <input type="number" id="dinero"><br><br>
+            <button id="comprar">Comprar</button>
+        </section>
+
+        <section id="mensaje-cambio" style="display:none;">
+            <h3>CAMBIO A DEVOLVER</h3>
+            <p id="cambio"></p>
+        </section>
+
+        <section id="carrito-section">
+            <h2>Carrito de Compras</h2>
+            <div id="carrito"></div>
+            <button id="limpiar-carrito">Limpiar Carrito</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Tienda Online. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

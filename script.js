@@ -1,68 +1,65 @@
+const productos = [
+    { nombre: "Gaseosa", precio: 2500 },
+    { nombre: "Cerveza", precio: 3200 },
+    { nombre: "Galletitas", precio: 1200 },
+    { nombre: "Hamburguesa", precio: 4500 }
+];
+
+let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+let productoSeleccionado = null;
+
 function restar(dinero, precioProducto) {
     return dinero - precioProducto;
 }
 
-let producto1 = { nombre: "Gaseosa", precio: 2500 };
-let producto2 = { nombre: "Cerveza", precio: 3200 };
-let producto3 = { nombre: "Galletitas", precio: 1200 };
-let producto4 = { nombre: "Hamburguesa", precio: 4500 };
+function mostrarFormulario(numeroProducto) {
+    productoSeleccionado = productos[numeroProducto - 1];
+    document.getElementById('formulario-compra').style.display = 'block';
+}
 
-let carrito = [];
-
-let continuarComprando = true;
-
-while (continuarComprando) {
-    let nombreUsuario = prompt("Ingrese su nombre:");
-
-    let pedido = parseInt(prompt(`Hola ${nombreUsuario}, ingrese el numero de los productos que desee comprar:
-    1- Gaseosa  $${producto1.precio}
-    2- Cerveza  $${producto2.precio}
-    3- Galletitas $${producto3.precio}
-    4- Hamburguesa $${producto4.precio}
-    5- Salir
-    `));
-
-    let productoSeleccionado;
-
-    switch (pedido) {
-        case 1:
-            productoSeleccionado = producto1;
-            break;
-        case 2:
-            productoSeleccionado = producto2;
-            break;
-        case 3:
-            productoSeleccionado = producto3;
-            break;
-        case 4:
-            productoSeleccionado = producto4;
-            break;
-        case 5:
-            continuarComprando = false;
-            continue;
-        default:
-            alert("Producto no disponible");
-            continue;
-    }
-
-    let cantidad = parseInt(prompt(`Ingrese la cantidad de ${productoSeleccionado.nombre} que desea comprar:`));
-
-    let dinero = parseInt(prompt(`Ingresar el dinero con el que va a pagar`));
+document.getElementById('comprar').addEventListener('click', () => {
+    const nombreUsuario = document.getElementById('nombre-usuario').value;
+    const cantidad = parseInt(document.getElementById('cantidad').value);
+    const dinero = parseInt(document.getElementById('dinero').value);
 
     if (dinero < productoSeleccionado.precio * cantidad) {
         alert("El dinero ingresado no es suficiente para comprar estos productos, por favor seleccione otro.");
-        continue;
+        return;
     }
 
-    let cambio = restar(dinero, productoSeleccionado.precio * cantidad);
-    alert("Cambio a devolver: " + cambio);
+    const cambio = restar(dinero, productoSeleccionado.precio * cantidad);
+    
+    document.getElementById('mensaje-cambio').style.display = 'block';
+    document.getElementById('cambio').textContent = `Cambio a devolver: $${cambio}`;
 
- 
-    let fechaCompra = new Date();
-    productoSeleccionado.comprador = nombreUsuario; 
-    productoSeleccionado.cantidad = cantidad; 
-    productoSeleccionado.fechaCompra = fechaCompra.toLocaleDateString(); 
-    carrito.push(productoSeleccionado);
+    const fechaCompra = new Date();
+    const productoComprado = { ...productoSeleccionado, comprador: nombreUsuario, cantidad: cantidad, fechaCompra: fechaCompra.toLocaleDateString() };
+    carrito.push(productoComprado);
+
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+    actualizarCarrito();
+
+    document.getElementById('formulario-compra').style.display = 'none';
+    document.getElementById('nombre-usuario').value = '';
+    document.getElementById('cantidad').value = '';
+    document.getElementById('dinero').value = '';
+});
+
+document.getElementById('limpiar-carrito').addEventListener('click', () => {
+    carrito = [];
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+    actualizarCarrito();
+});
+
+function actualizarCarrito() {
+    const carritoDiv = document.getElementById('carrito');
+    carritoDiv.innerHTML = '';
+    carrito.forEach((producto, index) => {
+        const productoDiv = document.createElement('div');
+        productoDiv.className = 'carrito-item';
+        productoDiv.textContent = `Producto: ${producto.nombre}, Cantidad: ${producto.cantidad}, Comprador: ${producto.comprador}, Fecha de Compra: ${producto.fechaCompra}`;
+        carritoDiv.appendChild(productoDiv);
+    });
 }
 
-console.log("Productos en el carrito:", carrito);
+actualizarCarrito();
